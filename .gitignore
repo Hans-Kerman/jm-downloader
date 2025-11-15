@@ -1,0 +1,65 @@
+# ==============================================================================
+#  Secrets & Environment Files
+#  Never commit sensitive information.
+# ==============================================================================
+.env
+option.yml
+
+
+# ==============================================================================
+#  Python Generated Files
+#  Byte-code, packaging and distribution artifacts.
+# ==============================================================================
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info/
+
+
+# ==============================================================================
+#  Virtual Environments
+#  Ignore virtual environment folders.
+# ==============================================================================
+.venv/
+venv/
+env/
+
+
+# ==============================================================================
+#  IDE / Editor Configuration
+#  User-specific settings for editors like VSCode, PyCharm, etc.
+# ==============================================================================
+.vscode/
+.idea/
+
+
+# ==============================================================================
+#  Testing & Tooling Caches
+#  Caches from tools like mypy, pytest, etc.
+# ==============================================================================
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+
+# ==============================================================================
+#  Project-specific Output & Logs
+#  Generated files, logs, and other runtime artifacts.
+# ==============================================================================
+downloads/
+*.log
+*.log.*
+
+inputs/*
+!inputs/.gitkeep
+
+
+# ==============================================================================
+#  Operating System Files
+#  System-specific metadata files (macOS, Windows).
+# ==============================================================================
+.DS_Store
+Thumbs.db

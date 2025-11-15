@@ -1,0 +1,18 @@
+[project]
+name = "jm-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dotenv>=0.9.9",
+    "jmcomic>=2.6.10",
+    "openai>=2.8.0",
+    "python-dotenv>=1.2.1",
+]
+
+[[tool.poetry.source]]
+name = "my_mirror"
+url = "https://mirror.lzu.edu.cn/pypi/web/simple"
+priority = "primary"
+
