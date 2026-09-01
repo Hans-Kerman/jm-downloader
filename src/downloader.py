@@ -2,7 +2,7 @@ import jmcomic
 import sys
 from pathlib import Path
 
-from config import ROOT_DIR
+from .config import ROOT_DIR
 
 
 def download_by_id(num: int):
