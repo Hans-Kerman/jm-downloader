@@ -6,28 +6,13 @@ from src import config
 from src import downloader
 from dotenv import load_dotenv
 
-if config.CUSTOM_ENV.exists():
-    load_dotenv() 
-
-    # 获取API配置 (推荐为必须项提供默认错误提示)
-    API_KEY = os.getenv("API_KEY")
-    BASE_URL = os.getenv("BASE_URL")
-    if not API_KEY or not BASE_URL:
-        raise ValueError("API_KEY and BASE_URL must be set in your .env file")
-
-    # 获取模型名称 (可以提供一个默认值)
-    MODEL_NAME = os.getenv("MODEL_NAME", "gemini-2.5-flash")
-    # 获取路径配置
-    DOWNLOAD_PATH = os.getenv("DOWNLOAD_PATH", "downloads") # 提供一个默认值 "downloads"
-    INPUT_PNG_DIR = os.getenv("INPUT_PNG_DIR", "input_images")
-else:
-    print("请先设置.env文件")
-    exit()
-
-client = OpenAI(
-    base_url=BASE_URL,
-    api_key=API_KEY,
-)
+def create_ocr_client():
+    load_dotenv(config.CUSTOM_ENV)
+    api_key = os.getenv("API_KEY")
+    base_url = os.getenv("BASE_URL")
+    if not api_key or not base_url:
+        raise ValueError("图片识别需要在 .env 中填写 API_KEY 和 BASE_URL")
+    return OpenAI(base_url=base_url, api_key=api_key)
 
 def encode_image_to_base64(image_path) -> str:
     """将图片文件编码为Base64字符串"""
@@ -35,6 +20,8 @@ def encode_image_to_base64(image_path) -> str:
         return base64.b64encode(image_file.read()).decode("utf-8")
     
 def llm_ocr(image_path: str):
+    client = create_ocr_client()
+    MODEL_NAME = os.getenv("MODEL_NAME", "gemini-2.5-flash")
     try:
         base64_image = encode_image_to_base64(image_path=image_path)
     except FileNotFoundError:
@@ -104,7 +91,8 @@ Rules:
     return (number_array, response.usage)
 
 
-if __name__ == '__main__':
+def main():
+    load_dotenv(config.CUSTOM_ENV)
     while(1):
         a = input(
 '''
@@ -112,23 +100,37 @@ if __name__ == '__main__':
     1 - 下载单独的album
     2 - 输入图片下载所有合集    
     3 - 使用.env更新配置
+    4 - 下载账号全部收藏
     0 - 退出程序
 '''
         )
         match a:
             case '1':
-                downloader.main()
+                try:
+                    downloader.main()
+                except (ValueError, downloader.DownloadSetupError) as e:
+                    print(e)
             case '2':
                 image_path = input("请输入要解析的图片的路径\n")
-                albums, tokens = llm_ocr(image_path=image_path)
+                try:
+                    albums, tokens = llm_ocr(image_path=image_path)
+                except ValueError as e:
+                    print(e)
+                    continue
                 for num in albums:
                     downloader.download_by_id(num)
                 print(f"任务结束，共消耗tokens如下：\n{str(tokens)}")
             case '3':
                 config.generate_option_yml()
+            case '4':
+                downloader.download_favorites()
             case '0':
                 print("退出程序")
                 exit()  
             case _:
                 print("非法输入，退出程序")
                 exit()
+
+
+if __name__ == '__main__':
+    main()

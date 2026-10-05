@@ -3,6 +3,7 @@
 #  Never commit sensitive information.
 # ==============================================================================
 .env
+.env.bak
 option.yml
 
 
