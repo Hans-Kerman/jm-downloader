@@ -33,8 +33,12 @@ idna==3.11
     #   httpx
 jiter==0.12.0
     # via openai
-jmcomic==2.6.10
+jmcomic==2.7.7
     # via jm-api (pyproject.toml)
+markdown-it-py==4.2.0
+    # via rich
+mdurl==0.1.2
+    # via markdown-it-py
 openai==2.8.0
     # via jm-api (pyproject.toml)
 pillow==12.0.0
@@ -47,12 +51,16 @@ pydantic==2.12.4
     # via openai
 pydantic-core==2.41.5
     # via pydantic
+pygments==2.21.0
+    # via rich
 python-dotenv==1.2.1
     # via
     #   jm-api (pyproject.toml)
     #   dotenv
 pyyaml==6.0.3
     # via jmcomic
+rich==15.0.0
+    # via jm-api (pyproject.toml)
 sniffio==1.3.1
     # via
     #   anyio

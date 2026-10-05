@@ -7,6 +7,15 @@ from .config import ROOT_DIR
 
 def download_by_id(num: int):
     option = jmcomic.create_option_by_file(str(ROOT_DIR / "option.yml"))
+    # 配置中的 after_init 插件已在加载时执行，只补充缺失的进度展示。
+    after_init = option.plugins.get("after_init", []) or []
+    if not any(plugin.get("plugin") == "download_progress" for plugin in after_init):
+        option.invoke_plugin(
+            jmcomic.JmModuleConfig.REGISTRY_PLUGIN["download_progress"],
+            kwargs={},
+            extra={},
+            pinfo={"plugin": "download_progress"},
+        )
     jmcomic.download_album(num, option)
 
 
